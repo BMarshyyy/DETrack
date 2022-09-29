@@ -1,144 +1,94 @@
-ScreenManager:
-    Splash:
-    Login:
+#:kivy 1.10.7
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import WipeTransition kivy.uix.screenmanager.SlideTransition
 
-<Splash>:
+WindowManager:
+    transition: NoTransition()
+    Splash_Page:
+    Login_Page:
+    Home_Page:
+    New_Account:
+    Add_Client:
+    View_Clients:
+
+<Splash_Page>:
     name: "splash"
-
-    # HEADER PNG / TEXT
     MDFloatLayout:
-        md_bg_color: 1, 1, 1, 1
-        MDIconButton:
-            icon: "assets/chevron_left.png"
-            user_font_size: "25sp"
-            pos_hint: {"center_y": .95}
-        MDLabel:
-            text: "Back"
-            font_size: "18sp"
-            pos_hint: {"center_x": .615, "center_y": .949}
+        md_bg_color: "#2f8c15"
         Image:
             source: "assets/tax_icon.png"
-            size_hint: .26, .26
-            pos_hint: {"center_x": .22, "center_y": .8}
-        MDLabel:
-            text: "Proceed with your"
-            font_size: "22sp"
-            color: 120/255, 120/255, 120/255, 1
-            pos_hint: {"center_x": .6, "center_y": .65}
-
-        MDLabel:
-            text: "Login"
-            font_size: "28sp"
-            pos_hint: {"center_x": .6, "center_y": .58}
-
-        # USERNAME LAYOUT / TEXT
-        MDFloatLayout:
-            size_hint: .79, .08
-            pos_hint: {"center_x": .5, "center_y": .42}
-
-            MDLabel:
-                text: "Username"
-                font_size: "14sp"
-                pos_hint: {"center_x": .5, "center_y": .9}
-
-            TextInput:
-                size_hint_y: 1
-                pos_hint: {"center_x": .49, "center_y": .30}
-                background_color: 0, 0, 0, 0
-                cursor_color: 0, 0, 0, 1
-                cursor_width: "2sp"
-                foreground_color: 120/255, 120/255, 120/255, 1
-                font_size: "17sp"
-                multiline: False
-
-            Image:
-                source: "assets/user_icon.png"
-                pos_hint: {"center_x": .96, "center_y": .5}
-                size_hint: .5, .5
-
-            MDFloatLayout:
-                pos_hint: {"center_x": .5, "center_y": 0}
-                size_hint_y: .03
-                md_bg_color: 120/255, 120/255, 120/255, 1
-
-        # PASSWORD USERNAME / LAYOUT
-        MDFloatLayout:
-            size_hint: .79, .08
-            pos_hint: {"center_x": .5, "center_y": .28}
-
-            MDLabel:
-                text: "Password"
-                font_size: "14sp"
-                pos_hint: {"center_x": .5, "center_y": .9}
-
-            TextInput:
-                size_hint_y: 1
-                pos_hint: {"center_x": .49, "center_y": .30}
-                background_color: 0, 0, 0, 0
-                cursor_color: 0, 0, 0, 1
-                cursor_width: "2sp"
-                font_size: "17sp"
-                multiline: False
-                password: True
-
-            Image:
-                source: "assets/key_icon.png"
-                pos_hint: {"center_x": .96, "center_y": .5}
-                size_hint: .4, .4
-
-            MDFloatLayout:
-                pos_hint: {"center_x": .5, "center_y": 0}
-                size_hint_y: .03
-                md_bg_color: 120/255, 120/255, 120/255, 1
-        
-        # LOGIN BUTTON 
-        Button:
-            text: "Login"
-            background_color: 0, 0, 0, 0
-            size_hint: .79, .08
-            pos_hint: {"center_x": .5, "center_y": .15}
-            on_release: root.manager.current = "login"
+            size_hint: .26,.26
+            pos_hint: {"center_x": .5, "center_y": .55}
             canvas.before:
                 Color: 
-                    rgb: 226/255, 0, 48/255, 1
-                RoundedRectangle:
-                    size: self.size
-                    pos: self.pos
-                    radius: [2]
-        # FORGOT PASSWORD
-        MDTextButton:
-            text: "Forget Password?"
-            font_size: "13sp"
-            pos_hint: {"center_x": .5, "center_y": .07}
+                    rgb: 1, 1, 1, 1
+                Ellipse:
+                    pos: 110, 210
+                    size: 130, 130
+            
+        MDLabel:
+            text: "CP Tax Buddy"
+            pos_hint: {"center_x": .5, "center_y": .9}
             halign: "center"
-            color: 120/255, 120/255, 120/255, 1
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1
+            font_size: "35sp"
+        
+        MDLabel:
+            text: "Child Care Tax Solutions"
+            pos_hint: {"center_x": .5, "center_y": .80}
+            halign: "center"
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1
+            font_size: "15sp"
 
-    
+        MDRectangleFlatButton:
+            text: "Get Started"
+            line_color: "black"
+            text_color: "#000000"
+            size_hint: .5, .08
+            pos_hint: {"center_x": .5, "center_y": .25}
+            on_release: 
+                root.manager.current = "login"
 
-<Login>:
+        MDTextButton:
+            text: "Create account "
+            font_size: "13sp"
+            pos_hint: {"center_x": .5, "center_y": .15}
+            halign: "center"
+            on_press: 
+                root.manager.current = "new account"
+
+
+<Login_Page>:
     name: "login"
 
     # HEADER PNG / TEXT
     MDFloatLayout:
         md_bg_color: 1, 1, 1, 1
+        # BACK ICON / TEXT
         MDIconButton:
             icon: "assets/chevron_left.png"
-            user_font_size: "25sp"
+            user_font_size: "15sp"
             pos_hint: {"center_y": .95}
+            on_press: root.manager.current = "splash"
         MDLabel:
             text: "Back"
-            font_size: "18sp"
+            font_size: "14sp"
             pos_hint: {"center_x": .615, "center_y": .949}
+        # TAX IMAGE
         Image:
             source: "assets/tax_icon.png"
             size_hint: .26, .26
             pos_hint: {"center_x": .22, "center_y": .8}
+        # PROCEED TEXT
         MDLabel:
             text: "Proceed with your"
             font_size: "22sp"
             color: 120/255, 120/255, 120/255, 1
             pos_hint: {"center_x": .6, "center_y": .65}
 
+        # LOGIN TEXT
         MDLabel:
             text: "Login"
             font_size: "28sp"
@@ -210,7 +160,9 @@ ScreenManager:
             background_color: 0, 0, 0, 0
             size_hint: .79, .08
             pos_hint: {"center_x": .5, "center_y": .15}
-            on_press: root.manager.current = "login"
+            on_press: 
+                root.manager.current = "home"
+
             canvas.before:
                 Color: 
                     rgb: 226/255, 0, 48/255, 1
@@ -225,3 +177,241 @@ ScreenManager:
             pos_hint: {"center_x": .5, "center_y": .07}
             halign: "center"
             color: 120/255, 120/255, 120/255, 1
+
+<Home_Page>:
+    name: 'home'
+    
+    # BOTTOM NAVIGATION
+    MDBottomNavigation:
+        panel_color: "#eeeaea"
+        selected_color_background: "orange"
+        text_color_active: "lightgrey"
+
+        # EXPENSES TAB
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Expenses'
+            icon: 'receipt-text-plus-outline'
+            
+            
+
+            # ADD EXPENSE 
+            MDRoundFlatButton:
+                text: 'Add Expense'
+                background_color: 0, 0, 0, 0
+                halign: 'center'
+                size_hint: .79, .08
+                pos_hint: {"center_x": .5, "center_y": .60}
+                on_press: 
+                canvas.before:
+                    Color: 
+                        rgb: 226/255, 0, 48/255, 1
+
+            # VIEW EXPENSES
+            MDRoundFlatButton:
+                text: 'View Expenses'
+                background_color: 0, 0, 0, 0
+                halign: 'center'
+                size_hint: .79, .08
+                pos_hint: {"center_x": .5, "center_y": .40}
+                on_press: 
+                canvas.before:
+                    Color: 
+                        rgb: 226/255, 0, 48/255, 1
+
+            # PLAYGROUND IMG
+            Image:
+                source: "assets/children_playground.png"
+                size_hint: .58, .58
+                pos_hint: {"center_x": .5, "center_y": .18}
+
+        # PAYMENT TRACKING TAB
+        MDBottomNavigationItem:
+            name: 'screen 2'
+            text: 'Pmt Tracking'
+            icon: 'cash-multiple'
+
+            # ADD EXPENSE 
+            MDRoundFlatButton:
+                text: 'Log Payment'
+                background_color: 0, 0, 0, 0
+                halign: 'center'
+                size_hint: .79, .08
+                pos_hint: {"center_x": .5, "center_y": .60}
+                on_press: 
+                canvas.before:
+                    Color: 
+                        rgb: 226/255, 0, 48/255, 1
+
+            # VIEW EXPENSES
+            MDRoundFlatButton:
+                text: 'View Payments'
+                background_color: 0, 0, 0, 0
+                halign: 'center'
+                size_hint: .79, .08
+                pos_hint: {"center_x": .5, "center_y": .40}
+                on_press: 
+                canvas.before:
+                    Color: 
+                        rgb: 226/255, 0, 48/255, 1
+
+            # PIG IMG
+            Image:
+                source: "assets/piggy_bank.png"
+                size_hint: .45, .45
+                pos_hint: {"center_x": .5, "center_y": .15}
+
+        # CLIENTS TAB
+        MDBottomNavigationItem:
+            name: 'screen 3'
+            text: 'Clients'
+            icon: 'account-group'
+
+            # ADD CLIENT 
+            MDRoundFlatButton:
+                text: 'Add Client'
+                background_color: 0, 0, 0, 0
+                halign: 'center'
+                size_hint: .79, .08
+                pos_hint: {"center_x": .5, "center_y": .60}
+                on_press: 
+                    root.manager.current = "add client"
+                canvas.before:
+                    Color: 
+                        rgb: 226/255, 0, 48/255, 1
+
+            # VIEW EXPENSES
+            MDRoundFlatButton:
+                text: 'View Clients'
+                background_color: 0, 0, 0, 0
+                halign: 'center'
+                size_hint: .79, .08
+                pos_hint: {"center_x": .5, "center_y": .40}
+                on_press: 
+                    app.root.current = "view clients"
+
+
+                canvas.before:
+                    Color: 
+                        rgb: 226/255, 0, 48/255, 1
+
+            # FAMILY IMG
+            Image:
+                source: "assets/family.png"
+                size_hint: .65, .65
+                pos_hint: {"center_x": .5, "center_y": .15}
+
+
+        # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "login"
+
+    MDLabel:
+        text: "Temp"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
+
+<New_Account>:
+    name: 'new account'
+    # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "splash"
+    MDLabel:
+        text: "Back"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
+    # NEW ACCOUNT TEXT
+    MDLabel:
+        text: "new account page"
+        pos_hint: {"center_x": .5, "center_y": .25}
+        halign: "center"
+        theme_text_color: "Custom"
+        font_size: "35sp"
+    
+    MDLabel:
+        text: "New account page"
+        pos_hint: {"center_x": .5, "center_y": .15}
+        halign: "center"
+        theme_text_color: "Custom"
+        #text_color: 1, 1, 1, 1
+        font_size: "15sp"
+
+<Add_Client>:
+    name: 'add client'
+
+    MDFloatLayout:
+        size_hint: .7, .8
+        line_color_normal: app.theme_cls.accent_color
+        multiline: False
+
+        MDTextField:
+            id: ac_first_name
+            hint_text: "First Name"
+            pos_hint: {"center_x": .7, "center_y": .80}
+            cursor_width: "2sp"
+            font_size: "17sp"
+            
+        
+        MDTextField:
+            id: ac_last_name
+            hint_text: "Last Name"
+            pos_hint: {"center_x": .7, "center_y": .68}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        MDTextField:
+            id: ac_dob
+            hint_text: "Date of birth"
+            pos_hint: {"center_x": .7, "center_y": .56}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+                # LOGIN BUTTON 
+        Button:
+            text: "Add Client"
+            background_color: 0, 0, 0, 0
+            size_hint: .79, .08
+            pos_hint: {"center_x": .7, "center_y": .20}
+            on_press: app.print_entry(root.ids.ac_first_name.text, root.ids.ac_last_name.text, root.ids.ac_dob.text)
+
+            canvas.before:
+                Color: 
+                    rgb: 226/255, 0, 48/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [2]
+
+
+
+    # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "home"
+    MDLabel:
+        text: "Back"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
+
+<View_Clients>:
+    name: "view clients"
+    id: client_table_display
+
+    # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "home"
+    MDLabel:
+        text: "Back"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
