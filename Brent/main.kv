@@ -387,7 +387,20 @@ WindowManager:
                     size: self.size
                     pos: self.pos
                     radius: [2]
+        Button:
+            text: "View Clients"
+            background_color: 0, 0, 0, 0
+            size_hint: .79, .08
+            pos_hint: {"center_x": .7, "center_y": .10}
+            on_press: root.manager.current = "view clients"
 
+            canvas.before:
+                Color: 
+                    rgb: 226/255, 0, 48/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [2]
 
 
     # BACK ICON / TEXT
@@ -415,3 +428,35 @@ WindowManager:
         text: "Back"
         font_size: "14sp"
         pos_hint: {"center_x": .615, "center_y": .949}
+    
+    # BOTTOM NAVIGATION BUTTONS
+    MDFloatLayout:
+        MDRaisedButton:
+            text: "Add Client"
+            halign: 'center'
+            size_hint: (.02, .01)
+            font_size: 12
+            pos_hint: {"center_x": .20, "center_y": .05}
+            on_press: 
+                root.manager.current = "add client"
+        MDRaisedButton:
+            text: "View Client"
+            halign: 'center'
+            size_hint: (.02, .01)
+            font_size: 12
+            pos_hint: {"center_x": .485, "center_y": .05}
+            on_press: root.manager.current = "home"
+        MDRaisedButton:
+            text: "Remove Client"
+            halign: 'center'
+            size_hint: (.02, .01)
+            font_size: 12
+            pos_hint: {"center_x": .80, "center_y": .05}
+            on_press: 
+                app.delete_selections()
+                root.manager.current = "home"
+                root.manager.current = "view clients"
+
+
+
+
