@@ -13,27 +13,48 @@ from kivymd.uix.floatlayout import MDFloatLayout
 Window.size = (350, 500)
 
 # INITIALIZING JSON STORE
-store = JsonStore('clients.json')
+clients_store = JsonStore('clients.json')
+expense_store = JsonStore('expenses.json')
+payment_store = JsonStore('payments.json')
 checked_data = []
 
 # ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
-# ~=~=~=~=~=~=~=~=~=~=~=~    Kivy Screens    =~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+# ~=~=~=~=~=~=~=~=   Kivy Screens - (Py Unused)   ~=~=~=~=~=~=~=~=~=~=~=~=
 # ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
 
-class Splash_Page(Screen):
+class Add_Client(Screen):
 	pass
 
-class Login_Page(Screen):
+class Add_Expense(Screen):
 	pass
 
 class Home_Page(Screen):
 	pass
 
+class Loading_Page(Screen):
+	pass
+
+class Login_Page(Screen):
+	pass
+
+class Log_Expense(Screen):
+	pass
+
+class Log_Payments(Screen):
+	pass
+
 class New_Account(Screen):
 	pass
 
-class Add_Client(Screen):
+class Splash_Page(Screen):
 	pass
+
+class View_Expenses(Screen):
+	pass
+
+# ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+# ~=~=~=~=~=~=~=~=~=~=~=~    Kivy Screens    =~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+# ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
 
 class View_Clients(Screen):
 
@@ -41,20 +62,20 @@ class View_Clients(Screen):
 			# Moves row data that has been checked
 		def on_check_press(self, instance_cell_row):
 				json_key = instance_cell_row[0] + instance_cell_row[1]
-
 				if json_key in checked_data:
 					checked_data.remove(json_key)
 				else:
 					checked_data.append(json_key)
+
 
 			# Displaying screen layout
 		layout = MDFloatLayout()
 		
 			# Generating tuple for table to display
 		json_client_list = []
-		for item in store:
+		for item in clients_store:
 			cl_tup = []
-			store_items = store.get(item)
+			store_items = clients_store.get(item)
 
 			for details in store_items.values():
 				cl_tup.append(details)
@@ -68,7 +89,7 @@ class View_Clients(Screen):
 			check=True,
 			
 			column_data=[
-				("[size=16]First[/size]", dp(25)),
+				("[size=16]First[/size]", dp(32)),
 				("[size=16]Last[/size]", dp(20)),
 				("[size=16]DoB[/size]", dp(20)),],
 			row_data=json_client_list)
@@ -76,12 +97,14 @@ class View_Clients(Screen):
 		# Adding widget and binding check capabilities
 		data_tables.bind(on_check_press = on_check_press)
 		self.add_widget(data_tables)
-
 		return layout
 
 		# Loads table upon entry 
 	def on_enter(self):
 		self.load_table()
+
+class View_Payments(Screen):
+	pass
 
 class WindowManager(ScreenManager):
 	pass	
@@ -100,17 +123,18 @@ class CPBuddy(MDApp):
 		return self.root_widget 	
 
 			# DELETES CHECKED ITEMS FROM JSONSTORE
-	def delete_selections(self):
-		for entry in checked_data:
-			store.delete(entry)
-			checked_data.remove(entry)
+	def delete_selections(self, *args):
+		list_size = len(checked_data)
 
-
+		amt_removed = 0
+		for x in range(0, list_size): # for item loop stops after 1 run
+			clients_store.delete(checked_data[x-amt_removed])
+			checked_data.remove(checked_data[x-amt_removed])
+			amt_removed += 1
 
 	def print_entry(self, *args):
 		client_id_name = str(args[0]) + str(args[1])
-		store.put(str(client_id_name), first_name = args[0], last_name = args[1], dob = args[2])
-
+		clients_store.put(str(client_id_name), first_name = args[0], last_name = args[1], dob = args[2])
 
 # ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
 # ~=~=~=~=~=~=~=~=~=~=~=~     Run The App    =~=~=~=~=~=~=~=~=~=~=~=~=~=~=
@@ -118,5 +142,6 @@ class CPBuddy(MDApp):
 
 if __name__ == '__main__':
     CPBuddy().run()
+
 
 
