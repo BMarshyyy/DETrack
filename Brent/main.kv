@@ -19,7 +19,7 @@ WindowManager:
 
     Add_Client:
     View_Clients:
-
+# -------------------------------------- Windows --------------------------------------------
 <Splash_Page>:
     name: "splash"
     MDFloatLayout:
@@ -378,6 +378,76 @@ WindowManager:
 # PMT TRACKING TAB
 <Log_Payments>:
     name: "log payments"
+
+    MDFloatLayout:
+        size_hint: .7, .8
+        line_color_normal: app.theme_cls.accent_color
+        multiline: False
+
+        MDTextField:
+            id: lp_child
+            hint_text: "Child"
+            pos_hint: {"center_x": .7, "center_y": .90}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        MDTextField:
+            id: lp_payee
+            hint_text: "Payee"
+            pos_hint: {"center_x": .7, "center_y": .80}
+            cursor_width: "2sp"
+            font_size: "17sp"
+            
+        MDTextField:
+            id: lp_amount
+            hint_text: "Amount"
+            pos_hint: {"center_x": .7, "center_y": .68}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        MDTextField:
+            id: lp_date_paid
+            hint_text: "Date of pay"
+            pos_hint: {"center_x": .7, "center_y": .56}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        MDTextField:
+            id: lp_memo
+            hint_text: "Memo"
+            pos_hint: {"center_x": .7, "center_y": .44}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        Button:
+            text: "Add Payment"
+            background_color: 0, 0, 0, 0
+            size_hint: .79, .08
+            pos_hint: {"center_x": .7, "center_y": .20}
+            on_press: app.add_payment_entry(root.ids.lp_child.text, root.ids.lp_payee.text, root.ids.lp_amount.text, root.ids.lp_date_paid.text, root.ids.lp_memo.text)
+
+            canvas.before:
+                Color: 
+                    rgb: 226/255, 0, 48/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [2]
+        Button:
+            text: "View Payments"
+            background_color: 0, 0, 0, 0
+            size_hint: .79, .08
+            pos_hint: {"center_x": .7, "center_y": .10}
+            on_press: root.manager.current = "view payments"
+
+            canvas.before:
+                Color: 
+                    rgb: 226/255, 0, 48/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [2]
+
         # BACK ICON / TEXT
     MDIconButton:
         icon: "assets/chevron_left.png"
@@ -431,13 +501,12 @@ WindowManager:
             cursor_width: "2sp"
             font_size: "17sp"
 
-                # LOGIN BUTTON 
         Button:
             text: "Add Client"
             background_color: 0, 0, 0, 0
             size_hint: .79, .08
             pos_hint: {"center_x": .7, "center_y": .20}
-            on_press: app.print_entry(root.ids.ac_first_name.text, root.ids.ac_last_name.text, root.ids.ac_dob.text)
+            on_press: app.add_client_entry(root.ids.ac_first_name.text, root.ids.ac_last_name.text, root.ids.ac_dob.text)
 
             canvas.before:
                 Color: 
@@ -495,22 +564,15 @@ WindowManager:
             halign: 'center'
             size_hint: (.02, .01)
             font_size: 12
-            pos_hint: {"center_x": .20, "center_y": .05}
+            pos_hint: {"center_x": .25, "center_y": .05}
             on_press: 
                 root.manager.current = "add client"
-        MDRaisedButton:
-            text: "View Client"
-            halign: 'center'
-            size_hint: (.02, .01)
-            font_size: 12
-            pos_hint: {"center_x": .485, "center_y": .05}
-            on_press: root.manager.current = "home"
         MDRaisedButton:
             text: "Remove Client"
             halign: 'center'
             size_hint: (.02, .01)
             font_size: 12
-            pos_hint: {"center_x": .80, "center_y": .05}
+            pos_hint: {"center_x": .70, "center_y": .05}
             on_press: 
                 app.delete_selections()
                 root.manager.current = "loading"
