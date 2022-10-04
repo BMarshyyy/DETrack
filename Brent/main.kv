@@ -6,8 +6,17 @@ WindowManager:
     transition: NoTransition()
     Splash_Page:
     Login_Page:
-    Home_Page:
     New_Account:
+
+    Home_Page:
+    Loading_Page:
+    
+    Add_Expense:
+    View_Expenses:
+
+    Log_Payments:
+    View_Payments:
+
     Add_Client:
     View_Clients:
 
@@ -177,6 +186,33 @@ WindowManager:
             pos_hint: {"center_x": .5, "center_y": .07}
             halign: "center"
             color: 120/255, 120/255, 120/255, 1
+<New_Account>:
+    name: 'new account'
+    # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "splash"
+    MDLabel:
+        text: "Back"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
+    # NEW ACCOUNT TEXT
+    MDLabel:
+        text: "new account page"
+        pos_hint: {"center_x": .5, "center_y": .25}
+        halign: "center"
+        theme_text_color: "Custom"
+        font_size: "35sp"
+    
+    MDLabel:
+        text: "New account page"
+        pos_hint: {"center_x": .5, "center_y": .15}
+        halign: "center"
+        theme_text_color: "Custom"
+        #text_color: 1, 1, 1, 1
+        font_size: "15sp"
 
 <Home_Page>:
     name: 'home'
@@ -192,8 +228,6 @@ WindowManager:
             name: 'screen 1'
             text: 'Expenses'
             icon: 'receipt-text-plus-outline'
-            
-            
 
             # ADD EXPENSE 
             MDRoundFlatButton:
@@ -202,7 +236,7 @@ WindowManager:
                 halign: 'center'
                 size_hint: .79, .08
                 pos_hint: {"center_x": .5, "center_y": .60}
-                on_press: 
+                on_press: root.manager.current = "add expense"
                 canvas.before:
                     Color: 
                         rgb: 226/255, 0, 48/255, 1
@@ -214,7 +248,7 @@ WindowManager:
                 halign: 'center'
                 size_hint: .79, .08
                 pos_hint: {"center_x": .5, "center_y": .40}
-                on_press: 
+                on_press: root.manager.current = "view expenses"
                 canvas.before:
                     Color: 
                         rgb: 226/255, 0, 48/255, 1
@@ -231,26 +265,26 @@ WindowManager:
             text: 'Pmt Tracking'
             icon: 'cash-multiple'
 
-            # ADD EXPENSE 
+            # ADD PAYMENT
             MDRoundFlatButton:
                 text: 'Log Payment'
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
                 pos_hint: {"center_x": .5, "center_y": .60}
-                on_press: 
+                on_press: root.manager.current = "log payments"
                 canvas.before:
                     Color: 
                         rgb: 226/255, 0, 48/255, 1
 
-            # VIEW EXPENSES
+            # VIEW PAYMENTS
             MDRoundFlatButton:
                 text: 'View Payments'
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
                 pos_hint: {"center_x": .5, "center_y": .40}
-                on_press: 
+                on_press: root.manager.current = "view payments"
                 canvas.before:
                     Color: 
                         rgb: 226/255, 0, 48/255, 1
@@ -314,34 +348,59 @@ WindowManager:
         font_size: "14sp"
         pos_hint: {"center_x": .615, "center_y": .949}
 
-<New_Account>:
-    name: 'new account'
-    # BACK ICON / TEXT
+
+# EXPENSES TAB
+<Add_Expense>:
+    name: "add expense"
+        # BACK ICON / TEXT
     MDIconButton:
         icon: "assets/chevron_left.png"
         user_font_size: "25sp"
         pos_hint: {"center_y": .95}
-        on_press: root.manager.current = "splash"
+        on_press: root.manager.current = "home"
     MDLabel:
         text: "Back"
         font_size: "14sp"
         pos_hint: {"center_x": .615, "center_y": .949}
-    # NEW ACCOUNT TEXT
-    MDLabel:
-        text: "new account page"
-        pos_hint: {"center_x": .5, "center_y": .25}
-        halign: "center"
-        theme_text_color: "Custom"
-        font_size: "35sp"
-    
-    MDLabel:
-        text: "New account page"
-        pos_hint: {"center_x": .5, "center_y": .15}
-        halign: "center"
-        theme_text_color: "Custom"
-        #text_color: 1, 1, 1, 1
-        font_size: "15sp"
+<View_Expenses>:
+    name: "view expenses"
 
+        # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "home"
+    MDLabel:
+        text: "Back"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
+# PMT TRACKING TAB
+<Log_Payments>:
+    name: "log payments"
+        # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "home"
+    MDLabel:
+        text: "Back"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
+<View_Payments>:
+    name: "view payments"
+        # BACK ICON / TEXT
+    MDIconButton:
+        icon: "assets/chevron_left.png"
+        user_font_size: "25sp"
+        pos_hint: {"center_y": .95}
+        on_press: root.manager.current = "home"
+    MDLabel:
+        text: "Back"
+        font_size: "14sp"
+        pos_hint: {"center_x": .615, "center_y": .949}
+# CLIENTS TAB
 <Add_Client>:
     name: 'add client'
 
@@ -454,9 +513,8 @@ WindowManager:
             pos_hint: {"center_x": .80, "center_y": .05}
             on_press: 
                 app.delete_selections()
-                root.manager.current = "home"
+                root.manager.current = "loading"
                 root.manager.current = "view clients"
 
-
-
-
+# BLANK SCREEN FOR REFRESHING PAGES
+<Loading_Page>:
