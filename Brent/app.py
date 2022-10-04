@@ -7,6 +7,20 @@ from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivymd.uix.floatlayout import MDFloatLayout
 
+# ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+# ~=~=~=~=~=~=~~=~=~~=~==~=   To Do List   ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+# ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+# 1.) Kivy Table keeps adding tables on top of eachother
+# 2.) Feedback upon completion (ex. add client)
+#
+#
+#
+#
+#
+# ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+# ~=~=~=~=~=~=~=~==~=~=   Easy Access Obj   ~=~=~=~=~=~=~=~=~=~=~=~==~=~=~
+# ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+
 #https://icons8.com/icons/set/chevron-left - icons
 
 # CHANGING DEFAULT INDOW SIZE
@@ -52,6 +66,12 @@ class Splash_Page(Screen):
 class View_Expenses(Screen):
 	pass
 
+class View_Payments(Screen):
+	pass
+
+class WindowManager(ScreenManager):
+	pass
+
 # ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
 # ~=~=~=~=~=~=~=~=~=~=~=~    Kivy Screens    =~=~=~=~=~=~=~=~=~=~=~=~=~=~=
 # ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
@@ -66,8 +86,7 @@ class View_Clients(Screen):
 					checked_data.remove(json_key)
 				else:
 					checked_data.append(json_key)
-
-
+					
 			# Displaying screen layout
 		layout = MDFloatLayout()
 		
@@ -80,8 +99,9 @@ class View_Clients(Screen):
 			for details in store_items.values():
 				cl_tup.append(details)
 			json_client_list.append(tuple(cl_tup))
+			
 			# Generates kivy table
-		data_tables = MDDataTable(
+		self.data_tables = MDDataTable(
 			size_hint=(1, .8),
 			pos_hint={"center_y": 0.5, "center_x": 0.5},
 			background_color_header = "#AEAEAE",
@@ -95,19 +115,13 @@ class View_Clients(Screen):
 			row_data=json_client_list)
 						
 		# Adding widget and binding check capabilities
-		data_tables.bind(on_check_press = on_check_press)
-		self.add_widget(data_tables)
+		self.data_tables.bind(on_check_press = on_check_press)
+		self.add_widget(self.data_tables)
 		return layout
 
 		# Loads table upon entry 
 	def on_enter(self):
 		self.load_table()
-
-class View_Payments(Screen):
-	pass
-
-class WindowManager(ScreenManager):
-	pass	
 
 class CPBuddy(MDApp):
 	sm = ScreenManager()
@@ -117,24 +131,32 @@ class CPBuddy(MDApp):
 	sm.add_widget(Screen(name='new account'))
 	sm.add_widget(Screen(name='add client'))
 	sm.add_widget(Screen(name='view clients'))
-
+	sm.add_widget(Screen(name='log payments'))
+	sm.add_widget(Screen(name='view payments'))
+	sm.add_widget(Screen(name='add expense'))
+	sm.add_widget(Screen(name='view expenses'))
+		
+		# PRIMARY BUILD
 	def build(self):
 		self.root_widget = Builder.load_file("main.kv")
 		return self.root_widget 	
 
-			# DELETES CHECKED ITEMS FROM JSONSTORE
+		# DELETES CHECKED ITEMS FROM JSONSTORE
 	def delete_selections(self, *args):
 		list_size = len(checked_data)
 
-		amt_removed = 0
-		for x in range(0, list_size): # for item loop stops after 1 run
-			clients_store.delete(checked_data[x-amt_removed])
-			checked_data.remove(checked_data[x-amt_removed])
-			amt_removed += 1
+		for x in range(0, list_size):
+			clients_store.delete(checked_data[x]) 
+		checked_data.clear() 
 
-	def print_entry(self, *args):
+		# ADDING CLIENTS TO JSON STORE
+	def add_client_entry(self, *args):
 		client_id_name = str(args[0]) + str(args[1])
 		clients_store.put(str(client_id_name), first_name = args[0], last_name = args[1], dob = args[2])
+
+	def add_payment_entry(self, *args):
+		payment_id_name = str(args[0]) + str(args[1])
+		payment_store.put(str(payment_id_name), child = args[0], payee = args[1], amount = args[2], pay_date = args[3], memo = args[4])
 
 # ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
 # ~=~=~=~=~=~=~=~=~=~=~=~     Run The App    =~=~=~=~=~=~=~=~=~=~=~=~=~=~=
@@ -142,6 +164,20 @@ class CPBuddy(MDApp):
 
 if __name__ == '__main__':
     CPBuddy().run()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
