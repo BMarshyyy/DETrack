@@ -26,14 +26,9 @@ WindowManager:
         md_bg_color: "#2f8c15"
         Image:
             source: "assets/tax_icon.png"
-            size_hint: .26,.26
+            size_hint: 1, 1
             pos_hint: {"center_x": .5, "center_y": .55}
-            canvas.before:
-                Color: 
-                    rgb: 1, 1, 1, 1
-                Ellipse:
-                    pos: 110, 210
-                    size: 130, 130
+
             
         MDLabel:
             text: "CP Tax Buddy"
@@ -235,7 +230,7 @@ WindowManager:
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
-                pos_hint: {"center_x": .5, "center_y": .60}
+                pos_hint: {"center_x": .5, "center_y": .70}
                 on_press: root.manager.current = "add expense"
                 canvas.before:
                     Color: 
@@ -247,8 +242,10 @@ WindowManager:
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
-                pos_hint: {"center_x": .5, "center_y": .40}
-                on_press: root.manager.current = "view expenses"
+                pos_hint: {"center_x": .5, "center_y": .50}
+                on_press: 
+                    root.manager.current = "loading"
+                    root.manager.current = "view expenses"
                 canvas.before:
                     Color: 
                         rgb: 226/255, 0, 48/255, 1
@@ -271,8 +268,9 @@ WindowManager:
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
-                pos_hint: {"center_x": .5, "center_y": .60}
-                on_press: root.manager.current = "log payments"
+                pos_hint: {"center_x": .5, "center_y": .70}
+                on_press: 
+                    root.manager.current = "log payments"
                 canvas.before:
                     Color: 
                         rgb: 226/255, 0, 48/255, 1
@@ -283,8 +281,10 @@ WindowManager:
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
-                pos_hint: {"center_x": .5, "center_y": .40}
-                on_press: root.manager.current = "view payments"
+                pos_hint: {"center_x": .5, "center_y": .50}
+                on_press: 
+                    root.manager.current = "loading"
+                    root.manager.current = "view payments"
                 canvas.before:
                     Color: 
                         rgb: 226/255, 0, 48/255, 1
@@ -307,7 +307,7 @@ WindowManager:
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
-                pos_hint: {"center_x": .5, "center_y": .60}
+                pos_hint: {"center_x": .5, "center_y": .70}
                 on_press: 
                     root.manager.current = "add client"
                 canvas.before:
@@ -320,8 +320,9 @@ WindowManager:
                 background_color: 0, 0, 0, 0
                 halign: 'center'
                 size_hint: .79, .08
-                pos_hint: {"center_x": .5, "center_y": .40}
+                pos_hint: {"center_x": .5, "center_y": .50}
                 on_press: 
+                    root.manager.current = "loading"
                     app.root.current = "view clients"
 
 
@@ -344,7 +345,7 @@ WindowManager:
         on_press: root.manager.current = "login"
 
     MDLabel:
-        text: "Temp"
+        text: "Back"
         font_size: "14sp"
         pos_hint: {"center_x": .615, "center_y": .949}
 
@@ -352,7 +353,79 @@ WindowManager:
 # EXPENSES TAB
 <Add_Expense>:
     name: "add expense"
-        # BACK ICON / TEXT
+
+    MDFloatLayout:
+        size_hint: .7, .8
+        line_color_normal: app.theme_cls.accent_color
+        multiline: False
+
+        MDTextField:
+            id: ae_expense
+            hint_text: "Expense"
+            pos_hint: {"center_x": .7, "center_y": 1}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        MDTextField:
+            id: ae_location
+            hint_text: "Purchase Location"
+            pos_hint: {"center_x": .7, "center_y": .85}
+            cursor_width: "2sp"
+            font_size: "17sp"
+            
+        MDTextField:
+            id: ae_amount
+            hint_text: "Amount"
+            pos_hint: {"center_x": .7, "center_y": .70}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        MDTextField:
+            id: ae_date
+            hint_text: "Date of purchase"
+            pos_hint: {"center_x": .7, "center_y": .55}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        MDTextField:
+            id: ae_category
+            hint_text: "Category"
+            pos_hint: {"center_x": .7, "center_y": .40}
+            cursor_width: "2sp"
+            font_size: "17sp"
+
+        Button:
+            text: "Add Expense"
+            background_color: 0, 0, 0, 0
+            size_hint: .79, .08
+            pos_hint: {"center_x": .7, "center_y": .20}
+            on_press: app.add_expense_entry(root.ids.ae_expense.text, root.ids.ae_location.text, root.ids.ae_amount.text, root.ids.ae_date.text, root.ids.ae_category.text)
+
+            canvas.before:
+                Color: 
+                    rgb: 226/255, 0, 48/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [2]
+        Button:
+            text: "View Expenses"
+            background_color: 0, 0, 0, 0
+            size_hint: .79, .08
+            pos_hint: {"center_x": .7, "center_y": .10}
+            on_press:
+                root.manager.current = "loading"
+                root.manager.current = "view expenses"
+
+            canvas.before:
+                Color: 
+                    rgb: 226/255, 0, 48/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [2]
+
+    # BACK ICON / TEXT
     MDIconButton:
         icon: "assets/chevron_left.png"
         user_font_size: "25sp"
@@ -365,7 +438,7 @@ WindowManager:
 <View_Expenses>:
     name: "view expenses"
 
-        # BACK ICON / TEXT
+    # BACK ICON / TEXT
     MDIconButton:
         icon: "assets/chevron_left.png"
         user_font_size: "25sp"
@@ -375,6 +448,27 @@ WindowManager:
         text: "Back"
         font_size: "14sp"
         pos_hint: {"center_x": .615, "center_y": .949}
+    # BOTTOM NAVIGATION BUTTONS
+    MDFloatLayout:
+        MDRaisedButton:
+            text: "Add Expense"
+            halign: 'center'
+            size_hint: (.02, .01)
+            font_size: 12
+            pos_hint: {"center_x": .25, "center_y": .05}
+            on_press: 
+                root.manager.current = "add expense"
+        MDRaisedButton:
+            text: "Remove Expense"
+            halign: 'center'
+            size_hint: (.02, .01)
+            font_size: 12
+            pos_hint: {"center_x": .70, "center_y": .05}
+            on_press: 
+                app.delete_selections_expenses()
+                root.manager.current = "loading"
+                root.manager.current = "view expenses"
+
 # PMT TRACKING TAB
 <Log_Payments>:
     name: "log payments"
@@ -387,35 +481,35 @@ WindowManager:
         MDTextField:
             id: lp_child
             hint_text: "Child"
-            pos_hint: {"center_x": .7, "center_y": .90}
+            pos_hint: {"center_x": .7, "center_y": 1}
             cursor_width: "2sp"
             font_size: "17sp"
 
         MDTextField:
             id: lp_payee
             hint_text: "Payee"
-            pos_hint: {"center_x": .7, "center_y": .80}
+            pos_hint: {"center_x": .7, "center_y": .85}
             cursor_width: "2sp"
             font_size: "17sp"
             
         MDTextField:
             id: lp_amount
             hint_text: "Amount"
-            pos_hint: {"center_x": .7, "center_y": .68}
+            pos_hint: {"center_x": .7, "center_y": .70}
             cursor_width: "2sp"
             font_size: "17sp"
 
         MDTextField:
             id: lp_date_paid
             hint_text: "Date of pay"
-            pos_hint: {"center_x": .7, "center_y": .56}
+            pos_hint: {"center_x": .7, "center_y": .55}
             cursor_width: "2sp"
             font_size: "17sp"
 
         MDTextField:
             id: lp_memo
             hint_text: "Memo"
-            pos_hint: {"center_x": .7, "center_y": .44}
+            pos_hint: {"center_x": .7, "center_y": .40}
             cursor_width: "2sp"
             font_size: "17sp"
 
@@ -438,7 +532,9 @@ WindowManager:
             background_color: 0, 0, 0, 0
             size_hint: .79, .08
             pos_hint: {"center_x": .7, "center_y": .10}
-            on_press: root.manager.current = "view payments"
+            on_press: 
+                root.manager.current = "loading"
+                root.manager.current = "view payments"
 
             canvas.before:
                 Color: 
@@ -470,6 +566,28 @@ WindowManager:
         text: "Back"
         font_size: "14sp"
         pos_hint: {"center_x": .615, "center_y": .949}
+
+        # BOTTOM NAVIGATION BUTTONS
+    MDFloatLayout:
+        MDRaisedButton:
+            text: "Log Payment"
+            halign: 'center'
+            size_hint: (.02, .01)
+            font_size: 12
+            pos_hint: {"center_x": .25, "center_y": .05}
+            on_press: 
+                root.manager.current = "log payments"
+        MDRaisedButton:
+            text: "Remove Payment"
+            halign: 'center'
+            size_hint: (.02, .01)
+            font_size: 12
+            pos_hint: {"center_x": .70, "center_y": .05}
+            on_press: 
+                app.delete_selections_payments()
+                root.manager.current = "loading"
+                root.manager.current = "view payments"
+
 # CLIENTS TAB
 <Add_Client>:
     name: 'add client'
@@ -520,7 +638,9 @@ WindowManager:
             background_color: 0, 0, 0, 0
             size_hint: .79, .08
             pos_hint: {"center_x": .7, "center_y": .10}
-            on_press: root.manager.current = "view clients"
+            on_press: 
+                root.manager.current = "loading"
+                root.manager.current = "view clients"
 
             canvas.before:
                 Color: 
@@ -574,7 +694,7 @@ WindowManager:
             font_size: 12
             pos_hint: {"center_x": .70, "center_y": .05}
             on_press: 
-                app.delete_selections()
+                app.delete_selections_clients()
                 root.manager.current = "loading"
                 root.manager.current = "view clients"
 
