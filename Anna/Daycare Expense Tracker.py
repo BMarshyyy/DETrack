@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from pandastable import Table
+import pandas as pd 
+
 
 #Root
 root = tk.Tk()
@@ -80,12 +83,59 @@ class ChildRelatedSupplies:
         Price_Label = tk.Label(tab2, text = "Price Paid")
         Price_Label.grid(row = 0, column = 2, padx = 100, pady = 15)  
         
+        #Getting Entries
+        my_entries = []
+        
+        expense_dict = {}
+        
+        def access():
+            entry_list1 = []
+            entry_list2 = []
+            entry_list3 = []
+            
+            list_pos = 0
+            for entries in my_entries:
+                if list_pos <= 4: 
+                    entry_list1.append(entries.get())
+                elif list_pos <= 9:
+                    entry_list2.append(entries.get())
+                else:
+                    entry_list3.append(entries.get())
+                list_pos += 1
+            
+            
+            expense_dict.update({'Store Name' : entry_list1})
+            expense_dict.update({'Product Purchased': entry_list2})
+            expense_dict.update({'Price Paid' : entry_list3})
+        
+        
+            pt.redrawVisible()
+            print(expense_dict)
+
+
+            
         #Create Multiple Entry Boxes
         for x in range(3):
                 for y in range(1, 6):
                     Xcord_Entry = Entry(tab2)
                     Xcord_Entry.grid(row = y, column = x, padx = 10, pady = 10)
+                    my_entries.append(Xcord_Entry)
                     
+                    
+        table_frame = tk.Frame (tab2)
+        table_frame.grid (row = 11, column= 1)
+        tk.Label(table_frame, text = "").grid (rowspan = 3, columnspan = 4)
+                    
+                    
+        #df = TableModel.getSampleData() 
+        df = pd.DataFrame(data=expense_dict)
+        self.table = pt = Table(table_frame, dataframe=df, showtoolbar=True, showstatusbar=True) 
+       
+        pt.show()
+        
+        
+        
+            
         #Combobox Entry Label        
         Expense_Label = tk.Label(tab2, text = "Select Expense Category")
         Expense_Label.grid(row = 0, column = 3, padx = 100, pady = 15)
@@ -98,11 +148,12 @@ class ChildRelatedSupplies:
         Expense_Combo ['state'] = 'readonly'
         
       
-        
-       
         #Create Save Button    
-        Save_Button = tk.Button(tab2, text = "Save")
+        Save_Button = tk.Button(tab2, text = "Save", command = access)
         Save_Button.grid(row = 10, column = 1, padx = 10, pady = 10)
+        
+        #my_print = tk.Label (tab2,text = '')
+        #my_print.grid(row = 11, column = 1, padx = 10, pady = 10)
         
 tab2_CRS = ChildRelatedSupplies(tab2)
 
@@ -116,4 +167,3 @@ tab2_CRS = ChildRelatedSupplies(tab2)
 
 
 root.mainloop()
-
