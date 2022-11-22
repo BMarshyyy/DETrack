@@ -5,7 +5,6 @@ from tkinter import messagebox
 from pandastable import Table, TableModel
 import pandas as pd 
 import json
-import string
 
     # INITIAL WINDOW
 root = tk.Tk()
@@ -34,13 +33,13 @@ def remove_items(item_list, item):
     return res
 
 def load_json():
-    with open('C:\\Users\\annam\\Desktop\\Python\\brent\\data_storage.json', 'r') as data_file:    
+    with open('C:\\Users\\Brent\\OneDrive\\Desktop\\Programming\\Python\Anna CE Track\\data_storage.json', 'r') as data_file:    
         data = json.load(data_file)
     data_file.close()
     return data
 
 def update_json(dictionary): #  expense_dict, 'expenses'
-    with open('C:\\Users\\annam\\Desktop\\Python\\brent\\data_storage.json', "w") as data_file:
+    with open('C:\\Users\\Brent\\OneDrive\\Desktop\\Programming\\Python\Anna CE Track\\data_storage.json', "w") as data_file:
         json.dump(dictionary, data_file)
     data_file.close()
     
@@ -68,89 +67,87 @@ class ChildRelatedSupplies:
             # CREATES DATA TABLE 
         def create_table():
             df = pd.DataFrame(data=expense_dict['expenses'])
-            self.table = pt = Table(table_frame3, dataframe=df, showtoolbar=True, showstatusbar=True, cellwidth = 130) 
+            self.table = pt = Table(table_frame3, dataframe=df, showtoolbar=False, showstatusbar=False, cellwidth = 140, ) 
             pt.show()
             pt.redraw()
 
-
             # SAVE BUTTON FUNCTIONALITY 
         def save_func():
-           # try:
+            try:
                 entry_list = []
-                
+                dict_keys = ['Date', 'Store Name', 'Purchase', 'Price Paid', 'Category']
                     # CREATING DATA SET FOR TABLE DISPLAY
-                count = 1
+                count = 0
                 for entry in my_entries:
-                    tot_len = len(my_entries) / 4
                     entry_list.append(entry.get())
-                
                         # STORES ENTRIES INTO DICTIONARY
-                    if count == tot_len:
-                        expense_dict['expenses']['Store Name'] += remove_items(entry_list, "")
-                    elif count == (tot_len*2):
-                        expense_dict['expenses']['Purchase'] += remove_items(entry_list, "")
-                    elif count == (tot_len*3):
-                        expense_dict['expenses']['Price Paid'] += remove_items(entry_list, "")
-                    elif count == (tot_len*4):
-                        expense_dict['expenses']['Category'] += remove_items(entry_list, "")
-                        
+                    expense_dict['expenses'][dict_keys[count]] += remove_items(entry_list, "")
+                    
+                        # RESETTING COUNT TO LOOP KEYS TEXT
+                    if count == 4:
+                        count -= 5
+                    count += 1
+
                         # RESETTING LIST 
-                    if count == (tot_len*1) or count == (tot_len*2) or count == (tot_len*3) or count == (tot_len*4):
-                        entry_list = []
-                    count +=1
+                    entry_list = []
                 
-                
+                    # NEEDS TO HAPPEN FIRST TO RAISE ERROR BEFORE ADDING TO JSON
+                create_table()
                 update_json(expense_dict)
                 
-                
-                create_table()
-                
-            #except:
+            except:
                     # HANDLES ERROR OF NOT FILLING ALL BOXES IN A ROW
-           #     messagebox.showwarning("Incomeplete Entry", "Please ensure all entries on a specifc row are complete and a number if applicable.")
+                messagebox.showwarning("Incomeplete Entry", "Please ensure all entries on a specifc row are complete and a number if applicable.")
             
             
             # ENTRY BOX LABELS
+        date_purchased_Label = tk.Label(table_frame1, text = "Date")
+        date_purchased_Label.grid(row = 0, column = 0, padx = 50, pady = 15)
+
         Store_Label = tk.Label(table_frame1, text = "Store Name")
-        Store_Label.grid(row = 0, column = 0, padx = 50, pady = 15)
+        Store_Label.grid(row = 0, column = 1, padx = 50, pady = 15)
         
         Product_Label = tk.Label(table_frame1, text = "Product Purchased")
-        Product_Label.grid(row = 0, column = 1, padx = 50, pady = 15)
+        Product_Label.grid(row = 0, column = 2, padx = 50, pady = 15)
 
         Price_Label = tk.Label(table_frame1, text = "Price Paid")
-        Price_Label.grid(row = 0, column = 2, padx = 50, pady = 15)  
+        Price_Label.grid(row = 0, column = 3, padx = 50, pady = 15)  
         
         
             # STORING ENTRY.GET() VALUES
         my_entries = []
-            # CREATING ENTRY BOXES
-        for x in range(3):
-            for y in range(1, 6):
-                Xcord_Entry = Entry(table_frame1)
-                Xcord_Entry.grid(row = y, column = x, padx = 5, pady = 5)
-                my_entries.append(Xcord_Entry)
-        
+            # CREATING ENTRY BOXES AND COMBO BOXES
+        count = 1
+        row = 1
+        for y in range(1, 6):
+            for x in range(5):
+                if count % 5 == 0:
+                    Expense_Var = tk.StringVar()
+                    Expense_Combo = ttk.Combobox(table_frame1, value = Expense_Var)
+                    my_entries.append(Expense_Combo) 
+                    
+                    Expense_Combo.grid(row =  row, column = 4, padx= 5, pady= 5)
+                    Expense_Combo ['values'] = ['Child Related Supplies', 'Home Supplies', 'Improvements and Repairs', 'Furniture and Appliances', 'Office Supplies', 'Misc']
+                    Expense_Combo ['state'] = 'readonly'
+                    row += 1
+                else:
+                    Xcord_Entry = Entry(table_frame1)
+                    Xcord_Entry.grid(row = y, column = x, padx = 5, pady = 5)
+                    my_entries.append(Xcord_Entry)
+
+                count += 1
         
             # CREATING TABLE BASED ON JSON (SEE FUNCTION)           
         create_table()      
-      
-                               
+                 
             # COMBOBOX ENTRY LABEL   
         Expense_Label = tk.Label(table_frame1, text = "Select Expense Category")
-        Expense_Label.grid(row = 0, column = 3, padx = 50, pady = 15)
+        Expense_Label.grid(row = 0, column = 4, padx = 50, pady = 15)
         
-        # CREATING COMBOBOX
-        for x in range(1, 6):
-            Expense_Var = tk.StringVar()
-            Expense_Combo = ttk.Combobox (table_frame1, value = Expense_Var, )
-            my_entries.append(Expense_Combo) 
-            
-            Expense_Combo.grid(row =  x, column = 3)
-            Expense_Combo ['values'] = ['Child Related Supplies', 'Home Supplies', 'Improvements and Repairs', 'Furniture and Appliances', 'Office Supplies', 'Misc']
-            Expense_Combo ['state'] = 'readonly'
       
         # SAVE BUTTON  
-        Save_Button = tk.Button(table_frame2, text = "Save", command = save_func).grid(row = 10, column = 1, padx = 10, pady = 10)
+        save_button = tk.Button(table_frame2, text = "Save", command = save_func).grid(row = 10, column = 1, padx = 10, pady = 10)
+        export_button = tk.Button(table_frame2, text = "Export", command = save_func).grid(row = 10, column = 2, padx = 10, pady = 10)
         
         
         
