@@ -1,10 +1,10 @@
 import tkinter as tk
-from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from pandastable import Table, TableModel
+from pandastable import Table
 import pandas as pd 
 import json
+import openpyxl
 
     # INITIAL WINDOW
 root = tk.Tk()
@@ -59,7 +59,9 @@ class ChildRelatedSupplies:
         
         table_frame3 = tk.Frame(tab2) # TABLE
         table_frame3.pack() 
-        
+
+        # ACCESSIBLE INDEX VAL
+        self.table_selected_index = None
         
             # JSON TABLE DATA
         expense_dict = load_json()
@@ -67,12 +69,40 @@ class ChildRelatedSupplies:
             # CREATES DATA TABLE 
         def create_table():
             df = pd.DataFrame(data=expense_dict['expenses'])
-            self.table = pt = Table(table_frame3, dataframe=df, showtoolbar=False, showstatusbar=False, cellwidth = 140, ) 
+            create_table.out_df = df 
+            self.table = pt = Table(table_frame3, dataframe=df, showtoolbar=False, showstatusbar=False, cellwidth = 140) 
+            
             pt.show()
             pt.redraw()
 
+                # ALLOWS RETURN OF INDEX FROM SELECTING A ROW
+            def handle_left_click(event):
+                rowclicked_single = pt.get_row_clicked(event)
+
+                self.table_selected_index = rowclicked_single # Index Variable
+
+                pt.setSelectedRow(rowclicked_single)
+                pt.redraw()
+                
+                # BINDING EVENT TO TABLE 
+            pt.rowheader.bind('<Button-1>', handle_left_click)
+
+            
+
+
+        def delete_table_item():
+                # DELETING ITEM FOR HEADER DICT KEY
+            col_headers = list(create_table.out_df.columns)
+            for header in col_headers:
+                del expense_dict['expenses'][header][self.table_selected_index]
+                # REFRESHING TABLE
+            create_table()
+            update_json(expense_dict)
+
+
             # SAVE BUTTON FUNCTIONALITY 
         def save_func():
+            #if deleting_entries is not None:
             try:
                 entry_list = []
                 dict_keys = ['Date', 'Store Name', 'Purchase', 'Price Paid', 'Category']
@@ -90,7 +120,10 @@ class ChildRelatedSupplies:
 
                         # RESETTING LIST 
                     entry_list = []
-                
+
+                #if deleting_entries is not None:
+                    
+
                     # NEEDS TO HAPPEN FIRST TO RAISE ERROR BEFORE ADDING TO JSON
                 create_table()
                 update_json(expense_dict)
@@ -99,6 +132,7 @@ class ChildRelatedSupplies:
                     # HANDLES ERROR OF NOT FILLING ALL BOXES IN A ROW
                 messagebox.showwarning("Incomeplete Entry", "Please ensure all entries on a specifc row are complete and a number if applicable.")
             
+
             
             # ENTRY BOX LABELS
         date_purchased_Label = tk.Label(table_frame1, text = "Date")
@@ -131,7 +165,7 @@ class ChildRelatedSupplies:
                     Expense_Combo ['state'] = 'readonly'
                     row += 1
                 else:
-                    Xcord_Entry = Entry(table_frame1)
+                    Xcord_Entry = tk.Entry(table_frame1)
                     Xcord_Entry.grid(row = y, column = x, padx = 5, pady = 5)
                     my_entries.append(Xcord_Entry)
 
@@ -146,8 +180,9 @@ class ChildRelatedSupplies:
         
       
         # SAVE BUTTON  
+        export_button = tk.Button(table_frame2, text = "Delete", command = delete_table_item).grid(row = 10, column = 0, padx = 10, pady = 10)
         save_button = tk.Button(table_frame2, text = "Save", command = save_func).grid(row = 10, column = 1, padx = 10, pady = 10)
-        export_button = tk.Button(table_frame2, text = "Export", command = save_func).grid(row = 10, column = 2, padx = 10, pady = 10)
+        export_button = tk.Button(table_frame2, text = "Export", command = delete_table_item).grid(row = 10, column = 2, padx = 10, pady = 10)
         
         
         
